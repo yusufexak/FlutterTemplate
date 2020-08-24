@@ -1,25 +1,30 @@
 import 'dart:convert';
 import 'dart:core';
 import 'package:denemehttp/Model/basemodel.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:denemehttp/Service/IResponseModel.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class WebService {
-  Future<T> getData<T, C>({
+  Future<ResponseModel<T>> getData<T extends BaseModel>({
     @required String url,
     @required BaseModel model,
     Map<String, String> headers,
   }) async {
+    IResponseModel<T> responseModel = ResponseModel<T>();
+
     try {
       final response = await http.get(url, headers: headers);
       final responseBody = json.decode(response.body);
       if (responseBody is List) {
-        return responseBody.map((e) => model.fromJson(e)).toList().cast<C>()
-            as T;
+        responseModel.list =
+            responseBody.map((e) => model.fromJson(e)).toList().cast<T>();
+        return responseModel;
       } else if (responseBody is Map) {
-        return model.fromJson(responseBody) as T;
+        responseModel.data = model.fromJson(responseBody) as T;
+        return responseModel;
       }
-      return model as T;
+      return model as ResponseModel<T>;
     } catch (e) {
       print(e);
       return null;
