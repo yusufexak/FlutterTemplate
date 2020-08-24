@@ -1,4 +1,5 @@
 import 'package:denemehttp/Model/fakemodel.dart';
+import 'package:denemehttp/Model/fakeuser.dart';
 import 'package:denemehttp/Model/weathermodel.dart';
 import 'package:denemehttp/Service/web_service.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   List<Fake> list;
   bool loading = true;
+  FakeUser user;
   @override
   void initState() {
     super.initState();
@@ -21,9 +23,10 @@ class _MyHomePageState extends State<MyHomePage> {
     loadingStatus(true);
 
     //WeatherModel model = await fetchWeather();
-    //print(model.sys.message);
+    user = await fetchUser();
     list = await fetchAll();
     loadingStatus(false);
+    print(user.title);
   }
 
   loadingStatus(bool status) {
@@ -37,6 +40,12 @@ class _MyHomePageState extends State<MyHomePage> {
         url: "https://jsonplaceholder.typicode.com/posts", model: Fake());
 
     return serviceResponse;
+  }
+
+  Future<FakeUser> fetchUser() async {
+    FakeUser user = await WebService().getData<FakeUser, Null>(
+        url: "https://jsonplaceholder.cypress.io/todos/2", model: FakeUser());
+    return user;
   }
 
   Future<WeatherModel> fetchWeather() async {

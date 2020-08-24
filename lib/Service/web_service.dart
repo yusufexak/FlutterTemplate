@@ -14,14 +14,10 @@ class WebService {
       final response = await http.get(url, headers: headers);
       final responseBody = json.decode(response.body);
       if (responseBody is List) {
-        var list = [];
-        responseBody.forEach((element) {
-          list.add(model.fromJson(element));
-        });
-        return list.cast<C>() as T;
+        return responseBody.map((e) => model.fromJson(e)).toList().cast<C>()
+            as T;
       } else if (responseBody is Map) {
-        var map = model.fromJson(responseBody);
-        return map as T;
+        return model.fromJson(responseBody) as T;
       }
       return model as T;
     } catch (e) {
