@@ -1,6 +1,7 @@
 import 'package:denemehttp/Model/fakemodel.dart';
 import 'package:denemehttp/Model/fakeuser.dart';
-import 'package:denemehttp/Service/responseModel.dart';
+import 'package:denemehttp/Service/responseList.dart';
+import 'package:denemehttp/Service/responseMap.dart';
 import 'package:denemehttp/Service/web_service.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var responseAll = await fetchAll();
     list = responseAll.list;
     var responseUser = await fetchUser();
-    user = responseUser.data;
+    user = responseUser.map;
     loadingStatus(false);
   }
 
@@ -36,15 +37,15 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<ResponseModel<Fake>> fetchAll() async {
-    ResponseModel<Fake> serviceResponse = await WebService().getData<Fake>(
+  Future<ResponseList<Fake>> fetchAll() async {
+    ResponseList<Fake> serviceResponse = await WebService().getData<Fake>(
         url: "https://jsonplaceholder.typicode.com/posts", model: Fake());
 
     return serviceResponse;
   }
 
-  Future<ResponseModel<FakeUser>> fetchUser() async {
-    ResponseModel<FakeUser> user = await WebService().getData<FakeUser>(
+  Future<ResponseMap<FakeUser>> fetchUser() async {
+    ResponseMap<FakeUser> user = await WebService().getData<FakeUser>(
         url: "https://jsonplaceholder.cypress.io/todos/5", model: FakeUser());
     return user;
   }
@@ -72,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    buildRow,
+                    // buildRow,
                     buildListView,
                   ],
                 ),
