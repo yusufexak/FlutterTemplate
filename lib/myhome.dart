@@ -1,6 +1,6 @@
 import 'package:denemehttp/Model/fakemodel.dart';
 import 'package:denemehttp/Model/fakeuser.dart';
-import 'package:denemehttp/Service/IResponseModel.dart';
+import 'package:denemehttp/Service/responseModel.dart';
 import 'package:denemehttp/Service/web_service.dart';
 import 'package:flutter/material.dart';
 
@@ -23,12 +23,10 @@ class _MyHomePageState extends State<MyHomePage> {
     loadingStatus(true);
 
     //WeatherModel model = await fetchWeather();
-    var a = await fetchAll();
-    list = a.list;
-    var t = await fetchUser();
-    user = t.data;
-    print(user.title);
-    print(t.msg);
+    var responseAll = await fetchAll();
+    list = responseAll.list;
+    var responseUser = await fetchUser();
+    user = responseUser.data;
     loadingStatus(false);
   }
 
@@ -47,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<ResponseModel<FakeUser>> fetchUser() async {
     ResponseModel<FakeUser> user = await WebService().getData<FakeUser>(
-        url: "https://jsonplaceholder.cypress.io/todos/4", model: FakeUser());
+        url: "https://jsonplaceholder.cypress.io/todos/5", model: FakeUser());
     return user;
   }
 /*
@@ -61,51 +59,54 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Scaffold(
-      body: loading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SizedBox(
-              width: size.width,
-              height: size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                      color: Colors.cyan,
-                      height: 120,
-                      width: size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("${user.id}"),
-                          Text("${user.title}"),
-                          Text("${user.userId}"),
-                          Text("${user.completed}"),
-                        ],
-                      )),
-                  buildListView(),
-                ],
+    return SafeArea(
+      child: Scaffold(
+        body: loading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : SizedBox(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    buildRow,
+                    buildListView,
+                  ],
+                ),
               ),
-            ),
-    );
-  }
-
-  Widget buildListView() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(list[index].title),
-            leading: Text(list[index].id.toString()),
-          );
-        },
       ),
     );
   }
+
+  Widget get buildRow => Container(
+        padding: EdgeInsets.all(24),
+        color: Colors.cyan,
+        width: double.infinity,
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          children: [
+            Chip(label: Text("${user.title}")),
+            Chip(label: Text("${user.id}")),
+            Chip(label: Text("${user.userId}")),
+            Chip(label: Text("${user.completed}")),
+          ],
+        ),
+      );
+
+  Widget get buildListView => Expanded(
+        child: ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(list[index].title),
+              leading: Text(
+                list[index].id.toString(),
+              ),
+            );
+          },
+        ),
+      );
 }
