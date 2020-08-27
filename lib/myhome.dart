@@ -1,3 +1,5 @@
+import 'package:denemehttp/Core/Service/Localization/language_service.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'Core/Service/Network/Response/responseModel.dart';
@@ -11,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
   Future<ResponseModel<Fake>> fake;
   ResponseModel<FakeUser> user;
 
@@ -53,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
             model: FakeUser());
     return user;
   }
+
   /*
   Future<WeatherModel> fetchWeather() async {
     WeatherModel weatherResponse = await NetworkService().getData<WeatherModel>(
@@ -61,11 +65,12 @@ class _MyHomePageState extends State<MyHomePage> {
         model: WeatherModel());
     return weatherResponse;
   }*/
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _globalKey,
+        appBar: buildAppBar(),
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
@@ -118,6 +123,50 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
+    );
+  }
+
+  AppBar buildAppBar() {
+    return AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {
+          _globalKey.currentState.showBottomSheet(
+            (context) => Container(
+              color: Colors.amber,
+              height: 100,
+              child: Center(
+                child: buildRowLang(context),
+              ),
+            ),
+          );
+        },
+      ),
+      title: Text("hello".tr().toString()),
+    );
+  }
+
+  Row buildRowLang(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: LanguageService.instance.locales
+          .map(
+            (e) => InkWell(
+              onTap: () {
+                EasyLocalization.of(context).locale = e;
+              },
+              child: Container(
+                padding: EdgeInsets.all(20),
+                child: Text(e.toLanguageTag()),
+                decoration: BoxDecoration(
+                  color: EasyLocalization.of(context).locale == e
+                      ? Colors.red
+                      : Colors.redAccent[100],
+                ),
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 
