@@ -1,8 +1,17 @@
+import 'package:denemehttp/Core/Service/Localization/language_service.dart';
 import 'package:denemehttp/myhome.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    EasyLocalization(
+      path: LanguageService.instance.path,
+      saveLocale: true,
+      supportedLocales: LanguageService.instance.locales,
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,6 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(
         // This is the theme of your application.
         //
