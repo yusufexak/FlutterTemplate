@@ -1,4 +1,4 @@
-import 'Error/IError.dart';
+import '../Error/IError.dart';
 import 'IResponseModel.dart';
 
 class ResponseModel<T> extends IResponseModel<T> {

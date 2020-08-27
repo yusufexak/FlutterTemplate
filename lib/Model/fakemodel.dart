@@ -1,4 +1,4 @@
-import 'package:denemehttp/Model/basemodel.dart';
+import 'package:denemehttp/Core/Base/basemodel.dart';
 
 class Fake extends BaseModel {
   int userId;

@@ -1,4 +1,4 @@
-import 'package:denemehttp/Service/Response/Error/IError.dart';
+import '../Error/IError.dart';
 
 abstract class IResponseModel<T> {
   T map;

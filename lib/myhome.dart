@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'Core/Service/Network/Response/responseModel.dart';
+import 'Core/Service/Network/network_service.dart';
 import 'Model/fakemodel.dart';
 import 'Model/fakeuser.dart';
-import 'Service/Response/responseModel.dart';
-import 'Service/web_service.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -28,6 +28,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //WeatherModel model = await fetchWeather();
 
     user = await fetchUser();
+    print(user.map.title);
     loadingStatus(false);
   }
 
@@ -38,20 +39,23 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<ResponseModel<Fake>> fetchAll() async {
-    ResponseModel<Fake> serviceResponse = await WebService().getData<Fake>(
-        url: "https://jsonplaceholder.typicode.com/posts", model: Fake());
+    ResponseModel<Fake> serviceResponse = await NetworkService.instance
+        .getData<Fake>(
+            url: "https://jsonplaceholder.typicode.com/posts", model: Fake());
 
     return serviceResponse;
   }
 
   Future<ResponseModel<FakeUser>> fetchUser() async {
-    ResponseModel<FakeUser> user = await WebService().getData<FakeUser>(
-        url: "https://jsonplaceholder.cypress.io/todos/5", model: FakeUser());
+    ResponseModel<FakeUser> user = await NetworkService.instance
+        .getData<FakeUser>(
+            url: "https://jsonplaceholder.cypress.io/todos/5",
+            model: FakeUser());
     return user;
   }
-/*
+  /*
   Future<WeatherModel> fetchWeather() async {
-    WeatherModel weatherResponse = await WebService().getData<WeatherModel>(
+    WeatherModel weatherResponse = await NetworkService().getData<WeatherModel>(
         url:
             "https://samples.openweathermap.org/data/2.5/weather?q=London,uk&appid=439d4b804bc8187953eb36d2a8c26a02",
         model: WeatherModel());

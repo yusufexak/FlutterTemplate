@@ -1,4 +1,4 @@
-import 'package:denemehttp/Service/Response/Error/IError.dart';
+import 'IError.dart';
 
 class ErrorMessage extends IError {
   final String errorMessage;

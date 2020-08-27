@@ -1,4 +1,4 @@
-import 'package:denemehttp/Model/basemodel.dart';
+import 'package:denemehttp/Core/Base/basemodel.dart';
 
 class WeatherModel extends BaseModel {
   Coord coord;

@@ -2,15 +2,23 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
-import 'package:denemehttp/Service/Response/Error/errorMessage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../Model/basemodel.dart';
+import '../../Base/basemodel.dart';
+import 'Error/errorMessage.dart';
 import 'Response/IResponseModel.dart';
 import 'Response/responseModel.dart';
 
-class WebService {
+class NetworkService {
+  static NetworkService _instance;
+  static NetworkService get instance {
+    if (_instance == null) _instance = NetworkService._init();
+    return _instance;
+  }
+
+  NetworkService._init();
+
   Future<IResponseModel<T>> getData<T extends BaseModel>({
     @required String url,
     @required BaseModel model,
