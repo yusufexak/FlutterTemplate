@@ -151,19 +151,14 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: LanguageService.instance.locales
           .map(
-            (e) => InkWell(
-              onTap: () {
+            (e) => FlatButton(
+              onPressed: () {
                 EasyLocalization.of(context).locale = e;
               },
-              child: Container(
-                padding: EdgeInsets.all(20),
-                child: Text(e.toLanguageTag()),
-                decoration: BoxDecoration(
-                  color: EasyLocalization.of(context).locale == e
-                      ? Colors.red
-                      : Colors.redAccent[100],
-                ),
-              ),
+              color: EasyLocalization.of(context).locale == e
+                  ? Colors.red
+                  : Colors.redAccent[100],
+              child: Text(e.toLanguageTag()),
             ),
           )
           .toList(),
